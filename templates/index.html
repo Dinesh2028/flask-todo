@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2 class="mb-4">📝 To-Do List</h2>
+
+<form method="POST" action="/add" class="input-group mb-3">
+    <input type="text" name="title" class="form-control" placeholder="Enter new task" required>
+    <button class="btn btn-primary" type="submit">Add Task</button>
+</form>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Task</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for task in tasks %}
+        <tr>
+            <td>{{ task[0] }}</td>
+            <td>
+                {% if task[2] == 'Completed' %}
+                    <s>{{ task[1] }}</s>
+                {% else %}
+                    {{ task[1] }}
+                {% endif %}
+            </td>
+            <td>{{ task[2] }}</td>
+            <td>
+                {% if task[2] != 'Completed' %}
+                    <a href="/complete/{{ task[0] }}" class="btn btn-success btn-sm">Complete</a>
+                {% endif %}
+                <form action="/update/{{ task[0] }}" method="POST" style="display:inline;">
+                    <input type="text" name="new_title" placeholder="New title" class="form-control form-control-sm d-inline-block w-50" required>
+                    <button class="btn btn-warning btn-sm" type="submit">Update</button>
+                </form>
+                <a href="/delete/{{ task[0] }}" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
