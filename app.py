@@ -1,14 +1,15 @@
-import os
 from flask import Flask, render_template, request, redirect
 
 app = Flask(__name__)
+todos = []
 
 @app.route('/')
-def home():
-    return "Hello, Flask on Render!"
+def index():
+    return render_template('index.html', todos=todos)
 
-# Important: This part makes the app work on Render
-if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
-
+@app.route('/add', methods=['POST'])
+def add():
+    task = request.form.get('task')
+    if task:
+        todos.append(task)
+    return redirect('/')
